@@ -1,0 +1,199 @@
+<head>
+
+	<script src="../../lib/p5.js"></script>
+
+  <script language="javascript" type="text/javascript" src="../../lib/p5.sound.js"></script> 
+
+  <script language="javascript" type="text/javascript" src="sketch.js"></script> 
+  
+</head>
+
+<body onload="preload();">
+
+	<div class="slidecontainer">
+  <input type="range" min="1" max="1000" value="42" class="slider" id="myRange">
+  <p>Width Value: <span id="demo"></span></p>
+</div>
+
+<div class="slidecontainer">
+  <input type="range" min="0" max="100" value="20" class="slider" id="myRange2">
+  <p>Smooth Value: <span id="demo2"></span></p>
+</div>
+
+<div class="slidecontainer">
+  <input type="range" min="0" max="255" value="0" class="slider" id="myRange3">
+  <p>Min Amp Value: <span id="demo3"></span></p>
+</div>
+
+<canvas id = "myCanvas"
+   width = "1680"
+   height = "1050">
+ <p>Your browser does not support the canvas tag...</p>
+ </canvas>
+	
+
+
+	<button onclick="micOnOff()">Mic</button>
+	<!-- <p id="demo"></p> -->
+	<button onclick="backgroundInvert()">Invert Background</button>
+		<!-- <p></p> -->
+	<button onclick="playSong()">Play/Pause Song</button>
+	<button onclick="pianoOnOff()">Show Piano</button>
+	<button onclick="diffractOnOff()">Diffract</button>
+
+	<script language="javascript" type="text/javascript" src="../../lib/p5.sound.js"></script> 
+
+	<p>
+
+
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+<script language="javascript" type="text/javascript" src="../../examples/micFFT/jQuery.js"></script> >
+<input type="file" id="rll" />
+<audio id="rllly" controls>
+  <source src="" id="rlly" />
+</audio>
+
+
+
+  <script>
+
+  	var slider = document.getElementById("myRange");
+	var output = document.getElementById("demo");
+	output.innerHTML = slider.value;
+
+	slider.oninput = function() {
+	  output.innerHTML = this.value;
+	  // console.log(this.value);
+	}
+
+	var slider2 = document.getElementById("myRange2");
+	var output2 = document.getElementById("demo2");
+	output2.innerHTML = slider2.value;
+
+	slider2.oninput = function() {
+	  output2.innerHTML = this.value;
+	  // console.log(this.value);
+	}
+
+	var slider3 = document.getElementById("myRange3");
+	var output3 = document.getElementById("demo3");
+	output3.innerHTML = slider3.value;
+
+	slider3.oninput = function() {
+	  output3.innerHTML = this.value;
+	  // console.log(this.value);
+	}
+
+
+  	console.log(myRange.value);
+
+  	var filePlaying = null;
+  	var soundFile2 = null;
+  	var reader = new FileReader();
+
+  	function handleFiles(event) {
+   		var files = event.target.files;
+   		$("#rll").attr("src", URL.createObjectURL(files[0]));
+   		filePlaying = files[0];
+   		document.getElementById("rllly").load();
+   		var array = new Uint8Array()
+
+   		// reader.onload = function(){
+   		var soundBlob = new Blob([new Uint8Array(this.result).buffer], {type: 'application/octet-stream'})
+   		// var soundBlob = new Blob([new Uint8Array(filePlaying).buffer], {type: 'application/octet-stream'})
+		soundFile2 = loadSound(files[0]);
+
+
+		// soundFile2 = loadSound(rlly);
+
+		// 	window.setTimeout(playFile(), 2000);
+			
+
+		// }
+    }
+
+
+	document.getElementById("rll").addEventListener("change", handleFiles, false);
+
+	
+
+	function playSong(){
+		// preload();
+		// var PA = document.getElementById("rlly");
+		if (soundFile2.isLoaded()){
+			if (soundFile2.isPlaying()){
+		   			 soundFile2.pause();
+		   			 // micOn = 1;
+	  		} else {
+	    		soundFile2.loop();
+	    		micOn = 0;
+	  		}
+	  	}
+	  	else{
+	  		console.log("Song not loaded.");
+	  	}
+
+		// reader.readAsArrayBuffer(filePlaying);
+
+	}
+
+
+
+  	var micText = "Mic Off"
+  	var micOn = 0;
+	var backgroundWhite = 0;
+	var pianoOn = 0;
+	var diffractOn = 0;
+	var soundFile;
+
+	
+  	// button.onclick = micOnOff();
+  	function micOnOff() {
+    	micOn = (micOn + 1) % 2;
+    	if (micOn){
+    		micText = "Mic Off";
+    	}
+    	else{
+    		micText = "Mic On";
+    	}
+	}
+	function backgroundInvert(){
+		backgroundWhite = (backgroundWhite + 1) % 2;
+	}
+
+	function preload(){
+		soundFormats('mp3', 'ogg');
+		// soundFile = loadSound("https://static.wixstatic.com/mp3/9f9440_806b624e3e0446bebc21a09ea2f92487.mp3?dn=Planetary+Alignment1.2.mp3");
+		// soundFile = loadSound("https://static.wixstatic.com/mp3/9f9440_eff6279294204120aee1d1738323feab.mp3?dn=cream.mp3");
+
+		// soundFile = loadSound(new Blob([new Uint8Array(this.result).buffer], {type: 'application/octet-stream'}));
+
+		// soundFile = loadSound("/Users/TimMacbook2/Music/iTunes/iTunes\ Media/Music/Compilations/99\ Must-Have\ Piano\ Masterpieces/09\ Claire\ de\ lune.mp3");
+		// soundFile = loadSound('../micFFT/PlanetaryAlignment1.2.mp3');
+	}
+	
+      
+	function pianoOnOff(){
+		pianoOn = (pianoOn + 1) % 2;
+	}
+	function diffractOnOff(){
+		diffractOn = (diffractOn + 1) % 2;
+	}
+	// var PA;
+	// function preload() {
+  		
+	// <!-- } -->
+
+	// soundFormats('mp3', 'ogg');
+      
+
+	// function playAudio() { 
+	// 	var PA = document.getElementById("CREAM");
+ //   		 PA.play(); 
+	// } 
+
+
+
+</script>
+</body>
